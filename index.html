@@ -1,0 +1,816 @@
+prueba123<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Derivabilidad · Hoja 4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Literata:opsz,wght@7..72,400;7..72,600&family=JetBrains+Mono:wght@400;600&display=swap">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  startup: { typeset: false }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg-full.js"></script>
+<style>
+/* Layout: cuaderno de cuadrícula. Cabecera, pestañas superiores; en Ejercicios, lista a la izquierda y ficha a la derecha. */
+:root {
+  --bg: #f6f8fb;
+  --grid: #e3e9f2;
+  --paper: #ffffff;
+  --ink: #1b2a4a;
+  --muted: #5b6b86;
+  --line: #d5dde9;
+  --accent: #2156c2;
+  --accent-soft: #e6eefc;
+  --ok: #1f7a4d;
+  --ok-soft: #e4f4ec;
+  --bad: #c2412d;
+  --bad-soft: #fbe9e5;
+  --plot-a: #2156c2;
+  --plot-b: #1f7a4d;
+  --plot-c: #b05a00;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Literata", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1520; --grid: #172133; --paper: #151d2b; --ink: #e5ecf7; --muted: #95a3bb; --line: #26324a;
+    --accent: #7ea6ff; --accent-soft: #1b2a47; --ok: #58c48d; --ok-soft: #13291f; --bad: #ff8a73; --bad-soft: #33191a;
+    --plot-a: #7ea6ff; --plot-b: #58c48d; --plot-c: #f0a050; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1520; --grid: #172133; --paper: #151d2b; --ink: #e5ecf7; --muted: #95a3bb; --line: #26324a;
+  --accent: #7ea6ff; --accent-soft: #1b2a47; --ok: #58c48d; --ok-soft: #13291f; --bad: #ff8a73; --bad-soft: #33191a;
+  --plot-a: #7ea6ff; --plot-b: #58c48d; --plot-c: #f0a050; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 1180px; margin-inline: auto; display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+header.top h1 { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.01em; }
+header.top h1 span { color: var(--accent); }
+.eyebrow { font-family: var(--font-display); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab {
+  font: 700 0.95rem var(--font-display); border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  padding: 8px 16px; border-radius: 999px; cursor: pointer;
+}
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tab:focus-visible, button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 22px; min-width: 0; }
+.prose { max-width: 70ch; }
+.prose p { margin: 0 0 10px; }
+
+/* Método */
+.metodo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; }
+.metodo .card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--accent); }
+.badge { display: inline-block; font: 700 0.72rem var(--font-display); letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; }
+.b-ok { background: var(--ok-soft); color: var(--ok); }
+.b-bad { background: var(--bad-soft); color: var(--bad); }
+.b-acc { background: var(--accent-soft); color: var(--accent); }
+
+/* Ejercicios */
+.ejs { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 820px) { .ejs { grid-template-columns: minmax(0, 1fr); } }
+.lista { display: flex; flex-direction: column; gap: 4px; padding: 10px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); max-height: calc(100vh - 40px); overflow-y: auto; }
+@media (max-width: 820px) { .lista { position: static; flex-direction: row; overflow-x: auto; max-height: none; } }
+.item {
+  display: flex; align-items: center; gap: 10px; border: 0; background: transparent; color: var(--ink); text-align: left;
+  padding: 7px 9px; border-radius: 9px; cursor: pointer; font: 500 0.92rem var(--font-display); flex-shrink: 0;
+}
+.item:hover { background: var(--accent-soft); }
+.item[aria-current="true"] { background: var(--accent); color: var(--paper); }
+.item .n { font-family: var(--font-mono); font-weight: 600; width: 1.8em; text-align: right; }
+.item .t { min-width: 0; }
+@media (max-width: 820px) { .item .t { display: none; } .item .n { width: auto; } }
+.ficha { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ficha-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; }
+.ficha-head h2 { font-size: 1.5rem; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.enun { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; overflow-x: auto; }
+.pasos { display: flex; flex-direction: column; gap: 12px; counter-reset: paso; }
+.paso { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 12px 52px; position: relative; overflow-x: auto; animation: entra 0.35s ease-out; }
+.paso::before {
+  counter-increment: paso; content: counter(paso); position: absolute; left: 14px; top: 13px; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--ink); color: var(--paper); font: 700 0.85rem var(--font-display); display: grid; place-items: center;
+}
+.paso h4 { margin: 0 0 6px; font: 700 1rem var(--font-display); color: var(--accent); }
+.paso p { margin: 0 0 6px; }
+@keyframes entra { from { transform: translateY(6px); opacity: 0.4; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .paso { animation: none; } }
+.controles { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn {
+  font: 700 0.9rem var(--font-display); border-radius: 10px; padding: 9px 14px; cursor: pointer; border: 1px solid var(--accent);
+  background: var(--accent); color: var(--paper);
+}
+.btn.sec { background: transparent; color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.prog { font: 600 0.85rem var(--font-mono); color: var(--muted); }
+.resultado { background: var(--ok-soft); border-left: 4px solid var(--ok); border-radius: 10px; padding: 14px 16px; overflow-x: auto; }
+.resultado h4 { margin: 0 0 6px; font: 700 1rem var(--font-display); color: var(--ok); }
+
+/* Laboratorio */
+.lab { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .lab { grid-template-columns: minmax(0, 1fr); } }
+.lab h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.canvasbox { position: relative; width: 100%; aspect-ratio: 4 / 3; max-width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
+.canvasbox canvas { width: 100%; height: 100%; display: block; }
+.leyenda { display: flex; gap: 14px; flex-wrap: wrap; font: 500 0.82rem var(--font-display); color: var(--muted); margin-top: 6px; }
+.leyenda i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.sliders { display: flex; flex-direction: column; gap: 12px; }
+.slider label { display: flex; justify-content: space-between; font: 600 0.92rem var(--font-display); }
+.slider label output { font-family: var(--font-mono); color: var(--accent); }
+.slider input { width: 100%; accent-color: var(--accent); }
+.checks { display: flex; flex-direction: column; gap: 8px; }
+.check { border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 0.92rem; }
+.check .h { font: 700 0.88rem var(--font-display); display: flex; justify-content: space-between; gap: 8px; }
+.check .v { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); }
+.check.ok { border-color: var(--ok); background: var(--ok-soft); }
+.check.ok .h span:last-child { color: var(--ok); }
+.check.no { border-color: var(--bad); background: var(--bad-soft); }
+.check.no .h span:last-child { color: var(--bad); }
+.graf-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.nota { font-size: 0.9rem; color: var(--muted); }
+
+/* Resumen */
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 700 0.82rem var(--font-display); letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+td:first-child { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+tr.go { cursor: pointer; }
+tr.go:hover td { background: var(--accent-soft); }
+mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+mjx-container[display="true"] { margin: 0.6em 0 !important; }
+</style>
+</head><body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">2.º Bachillerato · Matemáticas II · Unidad 2</div>
+      <h1>Derivabilidad <span>· Hoja 4</span></h1>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" id="t-metodo" data-v="metodo">Método</button>
+      <button class="tab" role="tab" id="t-ejercicios" data-v="ejercicios">Ejercicios</button>
+      <button class="tab" role="tab" id="t-resumen" data-v="resumen">Resumen</button>
+    </nav>
+  </header>
+
+  <section id="v-metodo" hidden>
+    <div class="metodo">
+      <div class="card prose">
+        <span class="badge b-acc">Paso 1</span>
+        <h3>Continuidad en \(x_0\)</h3>
+        <p>Los dos trozos tienen que llegar al mismo sitio, y ese sitio tiene que ser el valor de la función:</p>
+        <p>\[\lim_{x\to x_0^-}f(x)=\lim_{x\to x_0^+}f(x)=f(x_0)\]</p>
+        <p>Si no coinciden hay un <b>salto</b>, y la función no es continua.</p>
+      </div>
+      <div class="card prose">
+        <span class="badge b-acc">Paso 2</span>
+        <h3>Derivabilidad en \(x_0\)</h3>
+        <p>Si es continua, comparamos las pendientes de los dos trozos:</p>
+        <p>\[f'(x_0^-)=f'(x_0^+)\]</p>
+        <p>Si las pendientes son distintas, la gráfica tiene un <b>pico</b> (punto anguloso) y no es derivable.</p>
+      </div>
+      <div class="card prose">
+        <span class="badge b-bad">Idea clave</span>
+        <h3>Derivable ⇒ continua</h3>
+        <p>Si una función <b>no es continua</b>, no puede ser derivable: no hace falta calcular derivadas.</p>
+        <p>Si es continua, aún puede <b>no ser derivable</b> (picos, como en \(|x|\)).</p>
+      </div>
+      <div class="card prose">
+        <span class="badge b-ok">Con parámetros</span>
+        <h3>Dos condiciones, dos ecuaciones</h3>
+        <p>Cuando aparecen \(a\), \(b\), \(m\)…, la continuidad da <b>una ecuación</b> y la derivabilidad da <b>otra</b>. Se resuelve el sistema.</p>
+        <p>En cada ejercicio con parámetros tienes deslizadores para buscar tú los valores.</p>
+      </div>
+      <div class="card prose">
+        <span class="badge b-acc">Recta tangente</span>
+        <h3>En el punto \(x=a\)</h3>
+        <p>\[y-f(a)=f'(a)\,(x-a)\]</p>
+        <p>Primero se elige el trozo que corresponde al punto \(a\).</p>
+      </div>
+      <div class="card prose">
+        <span class="badge b-acc">L'Hôpital</span>
+        <h3>Indeterminaciones \(\tfrac00\)</h3>
+        <p>\[\lim\frac{f(x)}{g(x)}=\lim\frac{f'(x)}{g'(x)}\]</p>
+        <p>Aparece en los ejercicios 9 y 12, al calcular límites y derivadas laterales.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="v-ejercicios" hidden>
+    <div class="ejs">
+      <nav class="card lista" id="lista" aria-label="Ejercicios"></nav>
+      <article class="card ficha" id="ficha"></article>
+    </div>
+  </section>
+
+  <section id="v-resumen" hidden>
+    <div class="card">
+      <h2 style="font-size:1.3rem;margin-bottom:10px">Todas las soluciones</h2>
+      <p class="nota" style="margin:0 0 10px">Pulsa una fila para abrir el ejercicio.</p>
+      <div class="tablewrap"><table id="tabla"><thead><tr><th>Ej.</th><th>Qué se pide</th><th>Resultado</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const ln = Math.log, ex = Math.exp, R2 = Math.SQRT2;
+
+/* ---------------- DATOS ---------------- */
+const E = [
+{ n:1, t:"Continuidad y derivabilidad", tags:["gráfica"],
+  enun:String.raw`Estudiar la continuidad y derivabilidad de \[f(x)=\begin{cases} e^{-x} & x\gt 0\\ 1-x & x\le 0\end{cases}\] y representarla.`,
+  pasos:[
+   {h:"¿Dónde mirar?", c:String.raw`<p>Cada trozo (exponencial y polinomio) es continuo y derivable en su zona. Solo hay que estudiar el punto donde cambia de fórmula: \(x=0\).</p>`},
+   {h:"Continuidad en x = 0", c:String.raw`<p>\[\lim_{x\to0^-}(1-x)=1,\qquad \lim_{x\to0^+}e^{-x}=e^0=1,\qquad f(0)=1\]</p><p>Los tres valores coinciden: <b>es continua</b>.</p>`},
+   {h:"Derivadas laterales", c:String.raw`<p>\[f'(x)=\begin{cases}-e^{-x} & x\gt 0\\ -1 & x\lt 0\end{cases}\ \Rightarrow\ f'(0^-)=-1,\quad f'(0^+)=-e^0=-1\]</p><p>Coinciden: <b>es derivable</b> y \(f'(0)=-1\).</p>`}
+  ],
+  res:String.raw`Continua y derivable en todo \(\mathbb{R}\). Los dos trozos empalman sin salto y sin pico.`,
+  graphs:[{ name:"f(x)", view:[-3,4,-0.6,4.2], pieces:[
+    {f:x=>1-x, a:-Infinity, b:0, ib:true},
+    {f:x=>ex(-x), a:0, b:Infinity, ia:false}]}],
+  sum:"Continua y derivable en ℝ" },
+
+{ n:2, t:"Función con exponencial 1/x", tags:["gráfica","definición"],
+  enun:String.raw`Estudiar la continuidad y derivabilidad de \[f(x)=\begin{cases}\dfrac{x}{1+e^{1/x}} & x\neq0\\[4pt] 0 & x=0\end{cases}\]`,
+  pasos:[
+   {h:"Fuera de x = 0", c:String.raw`<p>El denominador \(1+e^{1/x}\) siempre es mayor que 1, nunca se anula. Así que \(f\) es continua y derivable en \(\mathbb{R}\setminus\{0\}\).</p>`},
+   {h:"Continuidad en x = 0", c:String.raw`<p>Por la derecha \(\tfrac1x\to+\infty\), así que \(e^{1/x}\to+\infty\) y \(f(x)\to\tfrac{0}{\infty}=0\).</p><p>Por la izquierda \(\tfrac1x\to-\infty\), así que \(e^{1/x}\to0\) y \(f(x)\to\tfrac{0}{1}=0\).</p><p>Los dos límites valen \(0=f(0)\): <b>es continua</b>.</p>`},
+   {h:"Derivada por la definición", c:String.raw`<p>\[f'(0)=\lim_{h\to0}\frac{f(h)-f(0)}{h}=\lim_{h\to0}\frac{1}{1+e^{1/h}}\]</p><p>\(h\to0^+\): \(\dfrac{1}{1+\infty}=0\). \(\quad h\to0^-\): \(\dfrac{1}{1+0}=1\).</p><p>Las derivadas laterales son distintas: <b>no es derivable en \(x=0\)</b>. Se ve un pico en la gráfica.</p>`}
+  ],
+  res:String.raw`Continua en \(\mathbb{R}\). Derivable en \(\mathbb{R}\setminus\{0\}\).`,
+  graphs:[{ name:"f(x)", view:[-3,3,-1.2,1.6], pieces:[
+    {f:x=>x/(1+ex(1/x)), a:-Infinity, b:0, ib:false},
+    {f:x=>x/(1+ex(1/x)), a:0, b:Infinity, ia:false}], points:[[0,0,true]] }],
+  sum:"Continua en ℝ; no derivable en x = 0" },
+
+{ n:3, t:"Tres trozos con valor absoluto", tags:["gráfica"],
+  enun:String.raw`Estudiar la continuidad y derivabilidad de \[f(x)=\begin{cases}|x+2| & x\lt -1\\ x^2 & -1\le x\le1\\ 2x+1 & 1\lt x\end{cases}\] y representarla.`,
+  pasos:[
+   {h:"Quitar el valor absoluto", c:String.raw`<p>\(|x+2|\) cambia de fórmula en \(x=-2\), que está dentro del primer trozo:</p><p>\[f(x)=\begin{cases}-x-2 & x\lt -2\\ x+2 & -2\le x\lt -1\\ x^2 & -1\le x\le1\\ 2x+1 & x\gt 1\end{cases}\qquad f'(x)=\begin{cases}-1 & x\lt -2\\ 1 & -2\lt x\lt -1\\ 2x & -1\lt x\lt 1\\ 2 & x\gt 1\end{cases}\]</p><p>Hay que estudiar \(x=-2\), \(x=-1\) y \(x=1\).</p>`},
+   {h:"En x = −2", c:String.raw`<p>Es continua (el valor absoluto lo es): \(f(-2)=0\).</p><p>\(f'(-2^-)=-1\), \(f'(-2^+)=1\): <b>no derivable</b> (pico).</p>`},
+   {h:"En x = −1", c:String.raw`<p>\(\lim_{x\to-1^-}(x+2)=1\), \(\ \lim_{x\to-1^+}x^2=1\), \(\ f(-1)=1\): <b>continua</b>.</p><p>\(f'(-1^-)=1\), \(f'(-1^+)=-2\): <b>no derivable</b> (pico).</p>`},
+   {h:"En x = 1", c:String.raw`<p>\(\lim_{x\to1^-}x^2=1\), pero \(\lim_{x\to1^+}(2x+1)=3\). Los límites son distintos: <b>no es continua</b> (salto).</p><p>Si no es continua, <b>tampoco es derivable</b>.</p>`}
+  ],
+  res:String.raw`Continua en \(\mathbb{R}\setminus\{1\}\). Derivable en \(\mathbb{R}\setminus\{-2,-1,1\}\).`,
+  graphs:[{ name:"f(x)", view:[-4.5,3,-0.6,6], pieces:[
+    {f:x=>Math.abs(x+2), a:-Infinity, b:-1, ib:false},
+    {f:x=>x*x, a:-1, b:1, ia:true, ib:true},
+    {f:x=>2*x+1, a:1, b:Infinity, ia:false}]}],
+  sum:"Salto en x = 1; picos en x = −2 y x = −1" },
+
+{ n:4, t:"Raíz cúbica y tangente", tags:["gráfica","tangente"],
+  enun:String.raw`\[f(x)=\begin{cases}\sqrt[3]{x-2} & x\ge2\\ x(x-2) & x\lt 2\end{cases}\] a) Estudiar su continuidad y derivabilidad. b) Recta tangente en \(x=3\).`,
+  pasos:[
+   {h:"Continuidad en x = 2", c:String.raw`<p>\(\lim_{x\to2^-}x(x-2)=0\), \(\ \lim_{x\to2^+}\sqrt[3]{x-2}=0\), \(\ f(2)=0\): <b>continua</b>.</p>`},
+   {h:"Derivadas laterales", c:String.raw`<p>\[f'(x)=\begin{cases}\dfrac{1}{3\sqrt[3]{(x-2)^2}} & x\gt 2\\[6pt] 2x-2 & x\lt 2\end{cases}\quad\Rightarrow\quad f'(2^-)=2,\qquad f'(2^+)=\frac{1}{3\cdot0^+}=+\infty\]</p><p>Por la derecha la tangente se pone vertical: <b>no es derivable en \(x=2\)</b>.</p>`},
+   {h:"b) Tangente en x = 3", c:String.raw`<p>Trozo \(x\ge2\): \(f(3)=\sqrt[3]{1}=1\), \(\ f'(3)=\dfrac13\).</p><p>\[y-1=\tfrac13(x-3)\ \Rightarrow\ y=\tfrac{x}{3}\]</p>`}
+  ],
+  res:String.raw`Continua en \(\mathbb{R}\), derivable en \(\mathbb{R}\setminus\{2\}\). Tangente en \(x=3\): \(y=\tfrac x3\).`,
+  graphs:[{ name:"f(x)", view:[-1,6,-1.6,2.5], tan:{x:3}, pieces:[
+    {f:x=>x*(x-2), a:-Infinity, b:2, ib:false},
+    {f:x=>Math.cbrt(x-2), a:2, b:Infinity, ia:true}]}],
+  sum:"No derivable en x = 2; tangente y = x/3" },
+
+{ n:5, t:"Parámetros a y b (EBAU 2019)", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}a-x & x\le1\\[2pt] \dfrac bx-\ln x & x\gt 1\end{cases}\] Calcular \(a\) y \(b\) para que \(f\) sea derivable en todo su dominio. Escribir la función resultante.`,
+  pasos:[
+   {h:"Continuidad en x = 1", c:String.raw`<p>\[\lim_{x\to1^-}(a-x)=a-1,\qquad \lim_{x\to1^+}\left(\frac bx-\ln x\right)=b\ \Rightarrow\ a-1=b\]</p>`},
+   {h:"Derivabilidad en x = 1", c:String.raw`<p>\[f'(1^-)=-1,\qquad f'(1^+)=-\frac{b}{1^2}-\frac11=-b-1\ \Rightarrow\ -1=-b-1\Rightarrow b=0\]</p>`},
+   {h:"Resolver", c:String.raw`<p>\(a=b+1=1\).</p><p>\[f(x)=\begin{cases}1-x & x\le1\\ -\ln x & x\gt 1\end{cases}\]</p>`}
+  ],
+  res:String.raw`\(a=1,\ b=0\).`,
+  params:{ p:[{k:"a",min:-3,max:3,step:0.1,v:0},{k:"b",min:-3,max:3,step:0.1,v:1}], sol:{a:1,b:0}, x0:[1] },
+  graphs:[{ name:"f(x)", view:[-1,4,-3,3], pieces:[
+    {f:(x,p)=>p.a-x, a:-Infinity, b:1, ib:true},
+    {f:(x,p)=>p.b/x-ln(x), a:1, b:Infinity, ia:false}]}],
+  sum:"a = 1, b = 0" },
+
+{ n:6, t:"Parámetros a y b (EBAU 2017)", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}x^2+4x+a & x\le2\\ -x^2+bx & x\gt 2\end{cases}\] Determinar \(a\) y \(b\) para que sea derivable en todo \(\mathbb{R}\).`,
+  pasos:[
+   {h:"Continuidad en x = 2", c:String.raw`<p>\[4+8+a=-4+2b\ \Rightarrow\ a-2b=-16\]</p>`},
+   {h:"Derivabilidad en x = 2", c:String.raw`<p>\[f'(2^-)=2\cdot2+4=8,\qquad f'(2^+)=-4+b\ \Rightarrow\ b=12\]</p>`},
+   {h:"Resolver", c:String.raw`<p>\(a=2b-16=8\).</p>`}
+  ],
+  res:String.raw`\(a=8,\ b=12\).`,
+  params:{ p:[{k:"a",min:-10,max:20,step:1,v:0},{k:"b",min:0,max:20,step:1,v:5}], sol:{a:8,b:12}, x0:[2] },
+  graphs:[{ name:"f(x)", view:[-5,7,-15,35], pieces:[
+    {f:(x,p)=>x*x+4*x+p.a, a:-Infinity, b:2, ib:true},
+    {f:(x,p)=>-x*x+p.b*x, a:2, b:Infinity, ia:false}]}],
+  sum:"a = 8, b = 12" },
+
+{ n:7, t:"Parámetros m y n", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}x^2-5x+m & x\le1\\ -x^2+nx & x\gt 1\end{cases}\] Calcular \(m\) y \(n\) para que sea derivable en todo \(\mathbb{R}\).`,
+  pasos:[
+   {h:"Continuidad en x = 1", c:String.raw`<p>\[1-5+m=-1+n\ \Rightarrow\ m-n=3\]</p>`},
+   {h:"Derivabilidad en x = 1", c:String.raw`<p>\[f'(1^-)=2-5=-3,\qquad f'(1^+)=-2+n\ \Rightarrow\ n=-1\]</p>`},
+   {h:"Resolver", c:String.raw`<p>\(m=n+3=2\).</p>`}
+  ],
+  res:String.raw`\(m=2,\ n=-1\).`,
+  params:{ p:[{k:"m",min:-5,max:5,step:0.5,v:0},{k:"n",min:-5,max:5,step:0.5,v:1}], sol:{m:2,n:-1}, x0:[1] },
+  graphs:[{ name:"f(x)", view:[-2,4,-10,8], pieces:[
+    {f:(x,p)=>x*x-5*x+p.m, a:-Infinity, b:1, ib:true},
+    {f:(x,p)=>-x*x+p.n*x, a:1, b:Infinity, ia:false}]}],
+  sum:"m = 2, n = −1" },
+
+{ n:8, t:"Parámetros a y b", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}ax^2+3x & x\le2\\ x^2-bx-4 & x\gt 2\end{cases}\] Hallar \(a\) y \(b\) para que sea derivable en todo \(\mathbb{R}\).`,
+  pasos:[
+   {h:"Continuidad en x = 2", c:String.raw`<p>\[4a+6=4-2b-4\ \Rightarrow\ 2a+b=-3\]</p>`},
+   {h:"Derivabilidad en x = 2", c:String.raw`<p>\[f'(2^-)=4a+3,\qquad f'(2^+)=4-b\ \Rightarrow\ 4a+b=1\]</p>`},
+   {h:"Resolver el sistema", c:String.raw`<p>Restando la primera a la segunda: \(2a=4\Rightarrow a=2\). Entonces \(b=-3-2a=-7\).</p><p>Comprobación: \(f(2)=14\) y \(f'(2)=11\) por los dos lados.</p>`}
+  ],
+  res:String.raw`\(a=2,\ b=-7\).`,
+  params:{ p:[{k:"a",min:-3,max:5,step:0.5,v:1},{k:"b",min:-10,max:5,step:0.5,v:0}], sol:{a:2,b:-7}, x0:[2] },
+  graphs:[{ name:"f(x)", view:[-2,5,-8,30], pieces:[
+    {f:(x,p)=>p.a*x*x+3*x, a:-Infinity, b:2, ib:true},
+    {f:(x,p)=>x*x-p.b*x-4, a:2, b:Infinity, ia:false}]}],
+  sum:"a = 2, b = −7" },
+
+{ n:9, t:"Logaritmo y L'Hôpital", tags:["parámetros","L'Hôpital"],
+  enun:String.raw`\[f(x)=\begin{cases}x^2+bx+c & x\le0\\[2pt] \dfrac{\ln(x+1)}{x} & x\gt 0\end{cases}\] Determina \(c\) para que sea continua en \(x=0\) y \(b\) para que sea derivable en \(x=0\).`,
+  pasos:[
+   {h:"Continuidad: límite con L'Hôpital", c:String.raw`<p>Por la izquierda \(f(0)=c\). Por la derecha hay \(\tfrac00\):</p><p>\[\lim_{x\to0^+}\frac{\ln(x+1)}{x}=\lim_{x\to0^+}\frac{\frac1{x+1}}{1}=1\ \Rightarrow\ c=1\]</p>`},
+   {h:"Derivada por la izquierda", c:String.raw`<p>\(f'(x)=2x+b\ \Rightarrow\ f'(0^-)=b\).</p>`},
+   {h:"Derivada por la derecha (definición)", c:String.raw`<p>\[f'(0^+)=\lim_{h\to0^+}\frac{\frac{\ln(1+h)}{h}-1}{h}=\lim_{h\to0^+}\frac{\ln(1+h)-h}{h^2}=\lim_{h\to0^+}\frac{\frac1{1+h}-1}{2h}=-\frac12\]</p><p>Igualando: \(b=-\tfrac12\).</p>`}
+  ],
+  res:String.raw`\(c=1\) (continuidad) y \(b=-\tfrac12\) (derivabilidad).`,
+  params:{ p:[{k:"c",min:-2,max:3,step:0.1,v:0},{k:"b",min:-2,max:2,step:0.1,v:0.5}], sol:{c:1,b:-0.5}, x0:[0] },
+  graphs:[{ name:"f(x)", view:[-2.5,3,-1,3], pieces:[
+    {f:(x,p)=>x*x+p.b*x+p.c, a:-Infinity, b:0, ib:true},
+    {f:(x,p)=>Math.log1p(x)/x, a:0, b:Infinity, ia:false}]}],
+  sum:"c = 1, b = −1/2" },
+
+{ n:10, t:"EBAU 2021-22", tags:["parámetros","tangente"],
+  enun:String.raw`\[f(x)=\begin{cases}(x-1)^2+bx & x\lt 1\\ a+\ln x & x\ge1\end{cases}\] a) Valores de \(a\) y \(b\) para que sea continua y derivable en \(\mathbb{R}\). b) Con \(a=-2\), \(b=1\), recta tangente en \(x=e\).`,
+  pasos:[
+   {h:"Continuidad en x = 1", c:String.raw`<p>\(\lim_{x\to1^-}\big((x-1)^2+bx\big)=b\), \(\ f(1)=a+\ln1=a\ \Rightarrow\ a=b\).</p>`},
+   {h:"Derivabilidad en x = 1", c:String.raw`<p>\(f'(1^-)=2(1-1)+b=b\), \(\ f'(1^+)=\tfrac11=1\ \Rightarrow\ b=1,\ a=1\).</p><p>\[f(x)=\begin{cases}(x-1)^2+x & x\lt 1\\ 1+\ln x & x\ge1\end{cases}\]</p>`},
+   {h:"b) Tangente en x = e (a = −2, b = 1)", c:String.raw`<p>Como \(e\ge1\): \(f(x)=-2+\ln x\), \(\ f(e)=-1\), \(\ f'(e)=\tfrac1e\).</p><p>\[y+1=\tfrac1e(x-e)\ \Rightarrow\ y=\frac xe-2\]</p><p>En la gráfica, pulsa «Apartado b» para verla.</p>`}
+  ],
+  res:String.raw`\(a=b=1\). Tangente del apartado b: \(y=\tfrac xe-2\).`,
+  params:{ p:[{k:"a",min:-3,max:3,step:0.5,v:0},{k:"b",min:-3,max:3,step:0.5,v:0}], sol:{a:1,b:1}, x0:[1], extra:{label:"Apartado b", v:{a:-2,b:1}, tan:Math.E} },
+  graphs:[{ name:"f(x)", view:[-1,4.5,-3,4], pieces:[
+    {f:(x,p)=>(x-1)**2+p.b*x, a:-Infinity, b:1, ib:false},
+    {f:(x,p)=>p.a+ln(x), a:1, b:Infinity, ia:true}]}],
+  sum:"a = b = 1; tangente y = x/e − 2" },
+
+{ n:11, t:"Valor absoluto en el punto", tags:["gráfica"],
+  enun:String.raw`¿Es derivable en \(x=1\) la función \(f(x)=x\,|x-1|\)? ¿Y la función \(g(x)=\dfrac{|x|}{x^2-1}\) en \(x=0\)?`,
+  pasos:[
+   {h:"f(x) = x|x−1|: quitar el valor absoluto", c:String.raw`<p>\[f(x)=\begin{cases}-x^2+x & x\lt 1\\ x^2-x & x\ge1\end{cases}\qquad f'(x)=\begin{cases}-2x+1 & x\lt 1\\ 2x-1 & x\gt 1\end{cases}\]</p>`},
+   {h:"f en x = 1", c:String.raw`<p>Continua (\(f(1)=0\) por los dos lados), pero \(f'(1^-)=-1\) y \(f'(1^+)=1\): <b>no es derivable</b>.</p>`},
+   {h:"g en x = 0 (definición)", c:String.raw`<p>Es continua, \(g(0)=0\).</p><p>\[\frac{g(h)-g(0)}{h}=\frac{|h|}{h(h^2-1)}\ \to\ \begin{cases}-1 & h\to0^+\\ 1 & h\to0^-\end{cases}\]</p><p>Las derivadas laterales son distintas: <b>no es derivable</b>.</p>`}
+  ],
+  res:String.raw`Ninguna es derivable en el punto pedido: las dos tienen un pico por el valor absoluto.`,
+  graphs:[
+   { name:"f(x) = x|x−1|", view:[-1,2.5,-1,2], pieces:[{f:x=>x*Math.abs(x-1), a:-Infinity, b:Infinity}], points:[[1,0,true]] },
+   { name:"g(x) = |x|/(x²−1)", view:[-0.9,0.9,-1.2,0.4], pieces:[{f:x=>Math.abs(x)/(x*x-1), a:-0.95, b:0.95}], points:[[0,0,true]] }],
+  sum:"Ninguna es derivable en el punto pedido" },
+
+{ n:12, t:"PAU 2024", tags:["parámetros","L'Hôpital","tangente"],
+  enun:String.raw`\[f(x)=\begin{cases}\dfrac{x^2-bx+9}{x^2+3} & x\le0\\[6pt] \dfrac{ax}{e^x-1}+2 & x\gt 0\end{cases}\] a) Valores de \(a\) y \(b\) para que sea continua y derivable en \(x=0\). b) Con \(a=1\), \(b=-2\), recta tangente en \(x=-1\).`,
+  pasos:[
+   {h:"Continuidad en x = 0", c:String.raw`<p>Izquierda: \(f(0)=\tfrac93=3\). Derecha, con L'Hôpital:</p><p>\[\lim_{x\to0^+}\frac{ax}{e^x-1}=\lim_{x\to0^+}\frac{a}{e^x}=a\ \Rightarrow\ a+2=3\Rightarrow a=1\]</p>`},
+   {h:"Derivada por la izquierda", c:String.raw`<p>\[f'(x)=\frac{(2x-b)(x^2+3)-(x^2-bx+9)\,2x}{(x^2+3)^2}\ \Rightarrow\ f'(0^-)=\frac{-3b}{9}=-\frac b3\]</p>`},
+   {h:"Derivada por la derecha (a = 1)", c:String.raw`<p>\[f'(0^+)=\lim_{h\to0^+}\frac{\frac{h}{e^h-1}-1}{h}=\lim_{h\to0^+}\frac{h-e^h+1}{h(e^h-1)}=\lim_{h\to0^+}\frac{-e^h}{2e^h+he^h}=-\frac12\]</p><p>(Aplicando L'Hôpital dos veces.) Igualando: \(-\tfrac b3=-\tfrac12\Rightarrow b=\tfrac32\).</p>`},
+   {h:"b) Tangente en x = −1 (a = 1, b = −2)", c:String.raw`<p>\(f(x)=\dfrac{x^2+2x+9}{x^2+3}\), \(\ f(-1)=\tfrac84=2\), \(\ f'(-1)=\dfrac{0\cdot4-8\cdot(-2)}{16}=1\).</p><p>\[y-2=x+1\ \Rightarrow\ y=x+3\]</p><p>Pulsa «Apartado b» en la gráfica para verla.</p>`}
+  ],
+  res:String.raw`\(a=1,\ b=\tfrac32\). Tangente del apartado b: \(y=x+3\).`,
+  params:{ p:[{k:"a",min:-2,max:4,step:0.5,v:0},{k:"b",min:-3,max:3,step:0.5,v:0}], sol:{a:1,b:1.5}, x0:[0], extra:{label:"Apartado b", v:{a:1,b:-2}, tan:-1} },
+  graphs:[{ name:"f(x)", view:[-5,4,-0.5,6], pieces:[
+    {f:(x,p)=>(x*x-p.b*x+9)/(x*x+3), a:-Infinity, b:0, ib:true},
+    {f:(x,p)=>p.a*x/Math.expm1(x)+2, a:0, b:Infinity, ia:false}]}],
+  sum:"a = 1, b = 3/2; tangente y = x + 3" },
+
+{ n:13, t:"PAU junio 2016", tags:["gráfica","tangente"],
+  enun:String.raw`\[f(x)=\begin{cases}x-x^2 & 0\le x\le1\\ (x-1)\ln^2 x & 1\lt x\le2\end{cases}\] a) Continuidad y derivabilidad en \(x=1\). b) Recta tangente en \(x=\tfrac34\).`,
+  pasos:[
+   {h:"Continuidad en x = 1", c:String.raw`<p>\(f(1)=0\), \(\ \lim_{x\to1^+}(x-1)\ln^2x=0\cdot0=0\): <b>continua</b>.</p>`},
+   {h:"Derivadas laterales", c:String.raw`<p>\[f'(x)=\begin{cases}1-2x & 0\lt x\lt 1\\ \ln^2x+(x-1)\dfrac{2\ln x}{x} & 1\lt x\lt 2\end{cases}\ \Rightarrow\ f'(1^-)=-1,\quad f'(1^+)=0\]</p><p>Son distintas: <b>no es derivable en \(x=1\)</b>.</p>`},
+   {h:"b) Tangente en x = 3/4", c:String.raw`<p>\(f(\tfrac34)=\tfrac34-\tfrac9{16}=\tfrac3{16}\), \(\ f'(\tfrac34)=1-\tfrac32=-\tfrac12\).</p><p>\[y-\tfrac3{16}=-\tfrac12\left(x-\tfrac34\right)\ \Rightarrow\ y=-\tfrac x2+\tfrac9{16}\]</p>`}
+  ],
+  res:String.raw`Continua pero no derivable en \(x=1\). Tangente: \(y=-\tfrac x2+\tfrac9{16}\).`,
+  graphs:[{ name:"f(x)", view:[-0.2,2.2,-0.5,0.6], tan:{x:0.75}, pieces:[
+    {f:x=>x-x*x, a:0, b:1, ia:true, ib:true},
+    {f:x=>(x-1)*ln(x)**2, a:1, b:2, ia:false, ib:true}]}],
+  sum:"No derivable en x = 1; tangente y = −x/2 + 9/16" },
+
+{ n:14, t:"EBAU 2020-21 julio", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}\dfrac{x^2+a}{2x-4} & x\le0\\[6pt] 10x^2+x+b & x\gt 0\end{cases}\] Calcular \(a\) y \(b\) para que sea continua y derivable en \(\mathbb{R}\). Dar \(f\) y \(f'\).`,
+  pasos:[
+   {h:"Solo hay que mirar x = 0", c:String.raw`<p>Para \(x\le0\) el denominador \(2x-4\) no se anula (solo en \(x=2\)).</p>`},
+   {h:"Continuidad", c:String.raw`<p>\(f(0)=\tfrac{a}{-4}\), \(\ \lim_{x\to0^+}(10x^2+x+b)=b\ \Rightarrow\ b=-\tfrac a4\).</p>`},
+   {h:"Derivabilidad", c:String.raw`<p>\[f'(x)=\frac{2x(2x-4)-2(x^2+a)}{(2x-4)^2}\Rightarrow f'(0^-)=-\frac a8,\qquad f'(0^+)=1\]</p><p>\(-\tfrac a8=1\Rightarrow a=-8\), y \(b=2\).</p>`},
+   {h:"Función y derivada", c:String.raw`<p>\[f(x)=\begin{cases}\dfrac{x^2-8}{2x-4} & x\le0\\[6pt] 10x^2+x+2 & x\gt 0\end{cases}\qquad f'(x)=\begin{cases}\dfrac{x^2-4x+8}{2(x-2)^2} & x\le0\\[6pt] 20x+1 & x\gt 0\end{cases}\]</p>`}
+  ],
+  res:String.raw`\(a=-8,\ b=2\).`,
+  params:{ p:[{k:"a",min:-12,max:4,step:1,v:0},{k:"b",min:-2,max:4,step:0.5,v:0}], sol:{a:-8,b:2}, x0:[0] },
+  graphs:[{ name:"f(x)", view:[-4,1.2,-2,6], pieces:[
+    {f:(x,p)=>(x*x+p.a)/(2*x-4), a:-Infinity, b:0, ib:true},
+    {f:(x,p)=>10*x*x+x+p.b, a:0, b:Infinity, ia:false}]}],
+  sum:"a = −8, b = 2" },
+
+{ n:15, t:"Continuidad y derivada nula", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}\dfrac{x^2+1}{x-1} & x\le0\\[6pt] \dfrac{ax+b}{x^2+2x+1} & x\gt 0\end{cases}\] Hallar \(a\) y \(b\) para que sea continua en \(x=0\) y su derivada se anule en \(x=2\).`,
+  pasos:[
+   {h:"Continuidad en x = 0", c:String.raw`<p>\(f(0)=\tfrac1{-1}=-1\), \(\ \lim_{x\to0^+}\tfrac{ax+b}{1}=b\ \Rightarrow\ b=-1\).</p>`},
+   {h:"Derivada del trozo x > 0", c:String.raw`<p>Como \(x^2+2x+1=(x+1)^2\):</p><p>\[f'(x)=\frac{a(x+1)-2(ax+b)}{(x+1)^3}=\frac{-ax+a-2b}{(x+1)^3}\]</p>`},
+   {h:"f'(2) = 0", c:String.raw`<p>\[f'(2)=\frac{-a-2b}{27}=0\ \Rightarrow\ a=-2b=2\]</p>`}
+  ],
+  res:String.raw`\(a=2,\ b=-1\).`,
+  params:{ p:[{k:"a",min:-3,max:4,step:0.5,v:0},{k:"b",min:-3,max:3,step:0.5,v:0}], sol:{a:2,b:-1}, x0:[0], derivZero:2, noDeriv:true },
+  graphs:[{ name:"f(x)", view:[-3,6,-3,1.5], pieces:[
+    {f:(x,p)=>(x*x+1)/(x-1), a:-Infinity, b:0, ib:true},
+    {f:(x,p)=>(p.a*x+p.b)/((x+1)**2), a:0, b:Infinity, ia:false}]}],
+  sum:"a = 2, b = −1" },
+
+{ n:16, t:"¿Existen a y b?", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}\sqrt{x^2+b}-2 & x\le-\sqrt2\\ 2-x^2 & -\sqrt2\lt x\lt \sqrt2\\ x^2\ln(x^2-a) & \sqrt2\le x\end{cases}\] ¿Existen \(a\) y \(b\) para que \(f\) sea derivable en todo \(\mathbb{R}\)?`,
+  pasos:[
+   {h:"En x = −√2: continuidad", c:String.raw`<p>\(\sqrt{2+b}-2=2-2=0\ \Rightarrow\ b=2\). Es el único valor posible.</p>`},
+   {h:"En x = −√2: derivadas", c:String.raw`<p>\(f'(-\sqrt2^-)=\dfrac{-\sqrt2}{\sqrt{4}}=-\dfrac{\sqrt2}{2}\), \(\quad f'(-\sqrt2^+)=-2(-\sqrt2)=2\sqrt2\).</p><p>Son distintas: <b>no es derivable</b>, ni siquiera con \(b=2\).</p>`},
+   {h:"En x = √2", c:String.raw`<p>Continuidad: \(2\ln(2-a)=0\Rightarrow a=1\).</p><p>\(f'(\sqrt2^+)=4\sqrt2\), \(\ f'(\sqrt2^-)=-2\sqrt2\): <b>no es derivable</b>.</p>`}
+  ],
+  res:String.raw`<b>No existen</b> \(a\) y \(b\). Con \(a=1\) y \(b=2\) es continua, pero tiene picos en \(x=\pm\sqrt2\). Prueba los deslizadores: nunca se ponen en verde las derivadas.`,
+  params:{ p:[{k:"a",min:-1,max:1.9,step:0.1,v:0},{k:"b",min:-1.5,max:4,step:0.5,v:0}], sol:{a:1,b:2}, x0:[-R2, R2], solLabel:"Probar a = 1, b = 2" },
+  graphs:[{ name:"f(x)", view:[-3.5,3.5,-3,5], pieces:[
+    {f:(x,p)=>Math.sqrt(x*x+p.b)-2, a:-Infinity, b:-R2, ib:true},
+    {f:(x,p)=>2-x*x, a:-R2, b:R2, ia:false, ib:false},
+    {f:(x,p)=>x*x*ln(x*x-p.a), a:R2, b:Infinity, ia:true}]}],
+  sum:"No existen" },
+
+{ n:17, t:"Tangente horizontal", tags:["parámetros","tangente"],
+  enun:String.raw`La gráfica de \(f(x)=\dfrac{ax^2+b}{x}\) tiene tangente horizontal en \(P(2,4)\). Halla \(a\) y \(b\).`,
+  pasos:[
+   {h:"Dos condiciones", c:String.raw`<p>La gráfica <b>pasa</b> por \(P\): \(f(2)=4\). La tangente es <b>horizontal</b>: \(f'(2)=0\).</p><p>Escribimos \(f(x)=ax+\dfrac bx\), así que \(f'(x)=a-\dfrac{b}{x^2}\).</p>`},
+   {h:"Las ecuaciones", c:String.raw`<p>\[2a+\frac b2=4,\qquad a-\frac b4=0\Rightarrow a=\frac b4\]</p>`},
+   {h:"Resolver", c:String.raw`<p>\(\tfrac b2+\tfrac b2=4\Rightarrow b=4\), \(\ a=1\). Queda \(f(x)=\dfrac{x^2+4}{x}\).</p>`}
+  ],
+  res:String.raw`\(a=1,\ b=4\).`,
+  params:{ p:[{k:"a",min:-2,max:3,step:0.5,v:0},{k:"b",min:-2,max:8,step:0.5,v:2}], sol:{a:1,b:4}, vals:[
+    {label:"f(2) = 4", fn:p=>2*p.a+p.b/2, target:4},
+    {label:"f'(2) = 0", fn:p=>p.a-p.b/4, target:0}] },
+  graphs:[{ name:"f(x)", view:[-6,6,-12,12], tan:{x:2}, pieces:[
+    {f:(x,p)=>p.a*x+p.b/x, a:-Infinity, b:0, ib:false},
+    {f:(x,p)=>p.a*x+p.b/x, a:0, b:Infinity, ia:false}], points:[[2,4,true]] }],
+  sum:"a = 1, b = 4" },
+
+{ n:18, t:"Exponencial y seno", tags:["parámetros"],
+  enun:String.raw`\[f(x)=\begin{cases}e^{ax} & x\le0\\ 2a+b\,\mathrm{sen}\,x & x\gt 0\end{cases}\] Determinar \(a\) y \(b\) para que sea derivable.`,
+  pasos:[
+   {h:"Continuidad en x = 0", c:String.raw`<p>\(e^0=1\), \(\ \lim_{x\to0^+}(2a+b\,\mathrm{sen}\,x)=2a\ \Rightarrow\ a=\tfrac12\).</p>`},
+   {h:"Derivabilidad en x = 0", c:String.raw`<p>\(f'(0^-)=a\,e^0=a=\tfrac12\), \(\ f'(0^+)=b\cos0=b\ \Rightarrow\ b=\tfrac12\).</p>`}
+  ],
+  res:String.raw`\(a=b=\tfrac12\).`,
+  params:{ p:[{k:"a",min:-2,max:2,step:0.1,v:0},{k:"b",min:-2,max:2,step:0.1,v:1}], sol:{a:0.5,b:0.5}, x0:[0] },
+  graphs:[{ name:"f(x)", view:[-4,7,-1.5,3], pieces:[
+    {f:(x,p)=>ex(p.a*x), a:-Infinity, b:0, ib:true},
+    {f:(x,p)=>2*p.a+p.b*Math.sin(x), a:0, b:Infinity, ia:false}]}],
+  sum:"a = b = 1/2" },
+
+{ n:19, t:"COVID-19 en Canarias", tags:["gráfica","contexto"],
+  enun:String.raw`Diagnosticados (miles), con \(t\) en meses desde marzo de 2020: \[f(t)=\begin{cases}-t^2+2t-0{,}3 & 0{,}2\le t\le1{,}8\\ 0{,}1t-0{,}12 & 1{,}8\lt t\le5\\ -0{,}5t^2+8{,}3t-28 & 5\lt t\le10\end{cases}\] Estudia la continuidad y la derivabilidad.`,
+  pasos:[
+   {h:"Dónde mirar", c:String.raw`<p>El dominio es \([0{,}2;\ 10]\). Todos los trozos son polinomios: solo hay que estudiar \(t=1{,}8\) y \(t=5\).</p>`},
+   {h:"En t = 1,8", c:String.raw`<p>Izquierda: \(-3{,}24+3{,}6-0{,}3=0{,}06\). Derecha: \(0{,}18-0{,}12=0{,}06\). <b>Continua</b>.</p><p>\(f'(1{,}8^-)=-1{,}6\), \(\ f'(1{,}8^+)=0{,}1\): <b>no derivable</b> (pico).</p>`},
+   {h:"En t = 5", c:String.raw`<p>Izquierda: \(0{,}38\). Derecha: \(-12{,}5+41{,}5-28=1\). <b>No es continua</b> (salto) y, por tanto, no es derivable.</p>`},
+   {h:"Qué significa", c:String.raw`<p>A finales de abril de 2020 los casos, que venían bajando, empiezan a subir despacio. En agosto de 2020 (\(t=5\)) hay un salto de unas 380 a 1000 personas: la segunda ola.</p>`}
+  ],
+  res:String.raw`Continua en \([0{,}2;\,10]\setminus\{5\}\). Derivable en \((0{,}2;\,10)\setminus\{1{,}8;\ 5\}\).`,
+  graphs:[{ name:"f(t)", view:[0,10.5,-0.3,7], pieces:[
+    {f:x=>-x*x+2*x-0.3, a:0.2, b:1.8, ia:true, ib:true},
+    {f:x=>0.1*x-0.12, a:1.8, b:5, ia:false, ib:true},
+    {f:x=>-0.5*x*x+8.3*x-28, a:5, b:10, ia:false, ib:true}]}],
+  sum:"Pico en t = 1,8; salto en t = 5" },
+
+{ n:20, t:"Costes de una empresa (EBAU 2021)", tags:["gráfica","contexto"],
+  enun:String.raw`Costes (decenas de miles de euros): \[f(t)=\begin{cases}\dfrac{(t-1)^2}{3}+4 & t\in[0,4]\\[6pt] \dfrac{18-t}{2} & t\in(4,10]\end{cases}\] ¿Es continua? ¿Es derivable?`,
+  pasos:[
+   {h:"Continuidad en t = 4", c:String.raw`<p>\(f(4)=\tfrac93+4=7\), \(\ \lim_{t\to4^+}\tfrac{18-t}{2}=7\). <b>Continua</b>.</p>`},
+   {h:"Derivabilidad en t = 4", c:String.raw`<p>\(f'(4^-)=\tfrac{2(4-1)}{3}=2\), \(\ f'(4^+)=-\tfrac12\). <b>No derivable</b>.</p>`},
+   {h:"Qué significa", c:String.raw`<p>Los costes no dan saltos, pero en el año 4 cambian de tendencia de golpe: suben hasta 70 000 € y luego bajan.</p>`}
+  ],
+  res:String.raw`Continua en \([0,10]\). Derivable en \((0,10)\setminus\{4\}\).`,
+  graphs:[{ name:"f(t)", view:[0,10.5,0,8], pieces:[
+    {f:x=>(x-1)**2/3+4, a:0, b:4, ia:true, ib:true},
+    {f:x=>(18-x)/2, a:4, b:10, ia:false, ib:true}]}],
+  sum:"Continua; no derivable en t = 4" }
+];
+
+/* ---------------- UTILIDADES ---------------- */
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt = v => !isFinite(v) ? (v > 0 ? "+∞" : v < 0 ? "−∞" : "—") : (Math.abs(v) > 999 ? (v > 0 ? "+∞" : "−∞") : v.toFixed(3).replace(".", ",").replace("-", "−"));
+const typeset = el => { if (window.MathJax && MathJax.typesetPromise) { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(() => {}); } };
+const safe = (f, x, p) => { try { const y = f(x, p); return Number.isFinite(y) ? y : NaN; } catch { return NaN; } };
+
+/* ---------------- NAVEGACIÓN ---------------- */
+const state = { view: "ejercicios", ej: 1, shown: 1, p: {}, graph: 0, tan: null, ready: false };
+function setView(v, push = true) {
+  state.view = v;
+  ["metodo", "ejercicios", "resumen"].forEach(k => {
+    $("#v-" + k).hidden = k !== v;
+    $("#t-" + k).setAttribute("aria-selected", String(k === v));
+  });
+  if (v === "metodo") typeset($("#v-metodo"));
+  if (v === "resumen") typeset($("#tabla"));
+  if (push) { const h = v === "ejercicios" ? "ej-" + state.ej : v; if (location.hash.slice(1) !== h) history.replaceState(null, "", "#" + h); }
+  if (v === "ejercicios") drawAll();
+}
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setView(b.dataset.v)));
+
+function buildList() {
+  const L = $("#lista");
+  E.forEach(e => {
+    const b = document.createElement("button");
+    b.className = "item"; b.type = "button"; b.dataset.n = e.n;
+    const n = document.createElement("span"); n.className = "n"; n.textContent = e.n;
+    const t = document.createElement("span"); t.className = "t"; t.textContent = e.t;
+    b.append(n, t);
+    b.addEventListener("click", () => openEj(e.n));
+    L.append(b);
+  });
+  const tb = $("#tabla tbody");
+  E.forEach(e => {
+    const tr = document.createElement("tr"); tr.className = "go"; tr.tabIndex = 0;
+    tr.innerHTML = `<td>${e.n}</td><td></td><td></td>`;
+    tr.children[1].textContent = e.t; tr.children[2].textContent = e.sum;
+    const go = () => { openEj(e.n); setView("ejercicios"); };
+    tr.addEventListener("click", go); tr.addEventListener("keydown", ev => { if (ev.key === "Enter") go(); });
+    tb.append(tr);
+  });
+}
+
+function openEj(n) {
+  const e = E.find(x => x.n === n); if (!e) return;
+  state.ej = n; state.shown = 1; state.graph = 0; state.tan = null;
+  state.p = {}; if (e.params) e.params.p.forEach(q => state.p[q.k] = q.v);
+  document.querySelectorAll(".item").forEach(b => b.setAttribute("aria-current", String(+b.dataset.n === n)));
+  renderFicha(e);
+  if (state.ready && state.view === "ejercicios") history.replaceState(null, "", "#ej-" + n);
+}
+
+/* ---------------- FICHA ---------------- */
+function renderFicha(e) {
+  const F = $("#ficha");
+  const tags = e.tags.map(t => `<span class="badge b-acc">${t}</span>`).join("");
+  F.innerHTML = `
+    <div class="ficha-head"><h2>Ejercicio ${e.n} · ${e.t}</h2><div class="tags">${tags}</div></div>
+    <div class="enun">${e.enun}</div>
+    <div>
+      <h3 style="font-size:1.1rem;margin-bottom:10px">Resolución paso a paso</h3>
+      <div class="pasos" id="pasos"></div>
+      <div class="controles" style="margin-top:12px">
+        <button class="btn" id="b-sig" type="button">Siguiente paso</button>
+        <button class="btn sec" id="b-todo" type="button">Ver todos</button>
+        <button class="btn sec" id="b-reset" type="button">Empezar de nuevo</button>
+        <span class="prog" id="prog"></span>
+      </div>
+    </div>
+    <div class="resultado" id="resul" hidden><h4>Resultado</h4><div>${e.res}</div></div>
+    <div id="labwrap"></div>
+    <div class="controles"><button class="btn sec" id="b-ant" type="button">← Anterior</button><button class="btn sec" id="b-sigej" type="button">Siguiente ejercicio →</button></div>`;
+  $("#b-sig").onclick = () => { state.shown = Math.min(e.pasos.length, state.shown + 1); renderPasos(e); };
+  $("#b-todo").onclick = () => { state.shown = e.pasos.length; renderPasos(e); };
+  $("#b-reset").onclick = () => { state.shown = 1; renderPasos(e); };
+  $("#b-ant").disabled = e.n === 1; $("#b-sigej").disabled = e.n === E.length;
+  $("#b-ant").onclick = () => { openEj(e.n - 1); window.scrollTo({ top: 0 }); };
+  $("#b-sigej").onclick = () => { openEj(e.n + 1); window.scrollTo({ top: 0 }); };
+  renderPasos(e, true);
+  renderLab(e);
+  typeset(F);
+}
+function renderPasos(e, first) {
+  const P = $("#pasos");
+  const have = P.children.length;
+  if (have > state.shown) { P.innerHTML = ""; }
+  for (let i = P.children.length; i < state.shown; i++) {
+    const d = document.createElement("div"); d.className = "paso";
+    d.innerHTML = `<h4>${e.pasos[i].h}</h4>${e.pasos[i].c}`;
+    P.append(d); if (!first) typeset(d);
+  }
+  const done = state.shown >= e.pasos.length;
+  $("#b-sig").disabled = done; $("#b-todo").disabled = done;
+  $("#resul").hidden = !done; if (done && !first) typeset($("#resul"));
+  $("#prog").textContent = `${state.shown} de ${e.pasos.length}`;
+}
+
+/* ---------------- LABORATORIO (gráfica + deslizadores) ---------------- */
+function renderLab(e) {
+  const W = $("#labwrap");
+  if (!e.graphs) { W.innerHTML = ""; return; }
+  const hasP = !!e.params;
+  W.innerHTML = `
+    <div class="lab">
+      <div>
+        <h3>${hasP ? "Laboratorio: busca tú los valores" : "Gráfica interactiva"}</h3>
+        ${e.graphs.length > 1 ? `<div class="graf-tabs" id="gtabs"></div>` : ""}
+        <div class="canvasbox"><canvas id="cv"></canvas></div>
+        <div class="leyenda" id="ley"></div>
+      </div>
+      <div class="sliders">
+        ${hasP ? `<div id="sl" class="sliders"></div>
+          <div class="controles"><button class="btn" id="b-sol" type="button">${e.params.solLabel || "Probar la solución"}</button>
+          ${e.params.extra ? `<button class="btn sec" id="b-extra" type="button">${e.params.extra.label}</button>` : ""}
+          <button class="btn sec" id="b-ini" type="button">Valores iniciales</button></div>
+          <div class="checks" id="checks"></div>`
+        : `<p class="nota">Pasa el ratón o el dedo por la gráfica para ver las coordenadas. El punto relleno pertenece al trozo; el hueco, no.</p>
+           <div class="checks" id="checks"></div>`}
+      </div>
+    </div>`;
+  if (e.graphs.length > 1) {
+    const G = $("#gtabs");
+    e.graphs.forEach((g, i) => {
+      const b = document.createElement("button"); b.className = "tab"; b.type = "button"; b.textContent = g.name;
+      b.setAttribute("aria-selected", String(i === state.graph));
+      b.onclick = () => { state.graph = i; G.querySelectorAll(".tab").forEach((x, j) => x.setAttribute("aria-selected", String(j === i))); drawAll(); };
+      G.append(b);
+    });
+  }
+  if (hasP) {
+    const S = $("#sl");
+    e.params.p.forEach(q => {
+      const d = document.createElement("div"); d.className = "slider";
+      d.innerHTML = `<label for="s-${e.n}-${q.k}"><span>${q.k}</span><output id="o-${q.k}"></output></label>
+        <input type="range" id="s-${e.n}-${q.k}" min="${q.min}" max="${q.max}" step="${q.step}" value="${state.p[q.k]}">`;
+      S.append(d);
+      const inp = d.querySelector("input");
+      inp.addEventListener("input", () => { state.p[q.k] = +inp.value; state.tan = null; syncSliders(e); drawAll(); });
+    });
+    const setP = (v, tan) => { Object.assign(state.p, v); state.tan = tan ?? null; e.params.p.forEach(q => $(`#s-${e.n}-${q.k}`).value = state.p[q.k]); syncSliders(e); drawAll(); };
+    $("#b-sol").onclick = () => setP(e.params.sol);
+    $("#b-ini").onclick = () => { const v = {}; e.params.p.forEach(q => v[q.k] = q.v); setP(v); };
+    if (e.params.extra) $("#b-extra").onclick = () => setP(e.params.extra.v, e.params.extra.tan);
+    syncSliders(e);
+  }
+  const cv = $("#cv");
+  const move = ev => { const r = cv.getBoundingClientRect(); const t = ev.touches ? ev.touches[0] : ev; state.hover = [t.clientX - r.left, t.clientY - r.top]; drawAll(); };
+  cv.addEventListener("mousemove", move); cv.addEventListener("touchmove", move, { passive: true });
+  cv.addEventListener("mouseleave", () => { state.hover = null; drawAll(); });
+  drawAll();
+}
+function syncSliders(e) { e.params.p.forEach(q => { const o = $("#o-" + q.k); if (o) o.textContent = String(state.p[q.k]).replace(".", ",").replace("-", "−"); }); }
+
+/* Comprobaciones con los deslizadores */
+function checks(e) {
+  const C = $("#checks"); if (!C) return;
+  C.innerHTML = "";
+  if (!e.params) return;
+  const p = state.p, g = e.graphs[0], h = 1e-4, eps = 1e-7;
+  const add = (titulo, ok, detalle) => {
+    const d = document.createElement("div"); d.className = "check " + (ok ? "ok" : "no");
+    d.innerHTML = `<div class="h"><span></span><span>${ok ? "✓ sí" : "✗ no"}</span></div><div class="v"></div>`;
+    d.querySelector(".h span").textContent = titulo; d.querySelector(".v").textContent = detalle; C.append(d);
+  };
+  const close = (u, v) => isFinite(u) && isFinite(v) && Math.abs(u - v) < 0.02 * Math.max(1, Math.abs(u));
+  (e.params.x0 || []).forEach(x0 => {
+    const L = g.pieces.find(q => Math.abs(q.b - x0) < 1e-9), Rp = g.pieces.find(q => Math.abs(q.a - x0) < 1e-9);
+    const vL = L.ib ? safe(L.f, x0, p) : safe(L.f, x0 - eps, p);
+    const vR = Rp.ia ? safe(Rp.f, x0, p) : safe(Rp.f, x0 + eps, p);
+    const xs = Math.abs(x0 - Math.SQRT2) < 1e-6 ? "√2" : Math.abs(x0 + Math.SQRT2) < 1e-6 ? "−√2" : String(x0);
+    const cont = close(vL, vR);
+    add(`Continua en x = ${xs}`, cont, `izquierda ${fmt(vL)}  ·  derecha ${fmt(vR)}`);
+    const dL = (safe(L.f, x0 - h, p) - safe(L.f, x0 - 2 * h, p)) / h;
+    const dR = (safe(Rp.f, x0 + 2 * h, p) - safe(Rp.f, x0 + h, p)) / h;
+    if (e.params.noDeriv) return;
+    if (cont) add(`Derivable en x = ${xs}`, close(dL, dR), `f'(${xs}⁻) ≈ ${fmt(dL)}  ·  f'(${xs}⁺) ≈ ${fmt(dR)}`);
+    else add(`Derivable en x = ${xs}`, false, "Primero tiene que ser continua");
+  });
+  if (e.params.derivZero !== undefined) {
+    const x = e.params.derivZero, piece = g.pieces.find(q => x > q.a && x < q.b);
+    const d = (safe(piece.f, x + h, p) - safe(piece.f, x - h, p)) / (2 * h);
+    add(`f'(${x}) = 0`, Math.abs(d) < 0.005, `f'(${x}) ≈ ${fmt(d)}`);
+  }
+  (e.params.vals || []).forEach(v => { const r = v.fn(p); add(v.label, Math.abs(r - v.target) < 1e-6, `valor actual: ${fmt(r)}`); });
+}
+
+/* Dibujo */
+function drawAll() {
+  const e = E.find(x => x.n === state.ej); const cv = $("#cv");
+  if (!e || !cv || state.view !== "ejercicios") return;
+  checks(e);
+  const g = e.graphs[state.graph], p = state.p;
+  const box = cv.parentElement, dpr = window.devicePixelRatio || 1;
+  const W = box.clientWidth, H = box.clientHeight; if (!W || !H) return;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const [x0, x1, y0, y1] = g.view;
+  const X = x => (x - x0) / (x1 - x0) * W, Y = y => H - (y - y0) / (y1 - y0) * H;
+  const ink = css("--ink"), muted = css("--muted"), line = css("--line"), grid = css("--grid"), paper = css("--paper");
+  const cols = [css("--plot-a"), css("--plot-b"), css("--plot-c")];
+  c.fillStyle = paper; c.fillRect(0, 0, W, H);
+  // cuadrícula
+  const step = v => { const r = v / 8, m = 10 ** Math.floor(Math.log10(r)), k = r / m; return (k < 1.5 ? 1 : k < 3.5 ? 2 : k < 7.5 ? 5 : 10) * m; };
+  const sx = step(x1 - x0), sy = step(y1 - y0);
+  c.lineWidth = 1; c.strokeStyle = grid; c.font = "11px JetBrains Mono, monospace"; c.fillStyle = muted;
+  for (let x = Math.ceil(x0 / sx) * sx; x <= x1; x += sx) { c.beginPath(); c.moveTo(X(x), 0); c.lineTo(X(x), H); c.stroke(); }
+  for (let y = Math.ceil(y0 / sy) * sy; y <= y1; y += sy) { c.beginPath(); c.moveTo(0, Y(y)); c.lineTo(W, Y(y)); c.stroke(); }
+  // ejes
+  c.strokeStyle = muted; c.lineWidth = 1.2;
+  const ax = Math.min(Math.max(Y(0), 0), H), ay = Math.min(Math.max(X(0), 0), W);
+  c.beginPath(); c.moveTo(0, ax); c.lineTo(W, ax); c.moveTo(ay, 0); c.lineTo(ay, H); c.stroke();
+  const lab = v => (Math.abs(v) < 1e-9 ? "0" : +v.toFixed(3) + "").replace(".", ",").replace("-", "−");
+  c.textAlign = "center"; c.textBaseline = "top";
+  for (let x = Math.ceil(x0 / sx) * sx; x <= x1 + 1e-9; x += sx) if (Math.abs(x) > 1e-9 && X(x) > 12 && X(x) < W - 12) c.fillText(lab(x), X(x), Math.min(ax + 4, H - 14));
+  c.textAlign = "right"; c.textBaseline = "middle";
+  for (let y = Math.ceil(y0 / sy) * sy; y <= y1 + 1e-9; y += sy) if (Math.abs(y) > 1e-9 && Y(y) > 10 && Y(y) < H - 10) c.fillText(lab(y), Math.max(ay - 5, 30), Y(y));
+  // trozos
+  const ends = [];
+  g.pieces.forEach((q, i) => {
+    const a = Math.max(q.a, x0), b = Math.min(q.b, x1); if (a >= b) return;
+    c.strokeStyle = cols[i % cols.length]; c.lineWidth = 2.6; c.lineJoin = "round"; c.lineCap = "round";
+    c.beginPath(); let pen = false; const N = 600;
+    for (let k = 0; k <= N; k++) {
+      let x = a + (b - a) * k / N; if (k === 0 && q.a === a) x += (b - a) * 1e-6; if (k === N && q.b === b) x -= (b - a) * 1e-6;
+      const y = safe(q.f, x, p);
+      if (!isFinite(y) || y < y0 - (y1 - y0) * 3 || y > y1 + (y1 - y0) * 3) { pen = false; continue; }
+      pen ? c.lineTo(X(x), Y(y)) : c.moveTo(X(x), Y(y)); pen = true;
+    }
+    c.stroke();
+    if (isFinite(q.a) && q.a >= x0) ends.push([q.a, q.ia ? safe(q.f, q.a, p) : safe(q.f, q.a + 1e-7, p), !!q.ia, cols[i % cols.length]]);
+    if (isFinite(q.b) && q.b <= x1) ends.push([q.b, q.ib ? safe(q.f, q.b, p) : safe(q.f, q.b - 1e-7, p), !!q.ib, cols[i % cols.length]]);
+  });
+  // tangente
+  const tx = state.tan ?? (g.tan ? g.tan.x : null);
+  if (tx !== null) {
+    const q = g.pieces.find(r => tx > r.a && tx < r.b) || g.pieces.find(r => tx >= r.a && tx <= r.b);
+    if (q) {
+      const hh = 1e-5, y = safe(q.f, tx, p), m = (safe(q.f, tx + hh, p) - safe(q.f, tx - hh, p)) / (2 * hh);
+      if (isFinite(y) && isFinite(m)) {
+        c.setLineDash([6, 5]); c.strokeStyle = ink; c.lineWidth = 1.4;
+        c.beginPath(); c.moveTo(X(x0), Y(y + m * (x0 - tx))); c.lineTo(X(x1), Y(y + m * (x1 - tx))); c.stroke(); c.setLineDash([]);
+        c.fillStyle = ink; c.beginPath(); c.arc(X(tx), Y(y), 4, 0, 7); c.fill();
+      }
+    }
+  }
+  // extremos y puntos
+  const dot = (x, y, filled, col) => { if (!isFinite(y)) return; c.beginPath(); c.arc(X(x), Y(y), 4.5, 0, 7); c.lineWidth = 2; c.strokeStyle = col; c.fillStyle = filled ? col : paper; c.fill(); c.stroke(); };
+  ends.filter(d => !d[2]).forEach(d => dot(...d)); ends.filter(d => d[2]).forEach(d => dot(...d));
+  (g.points || []).forEach(([x, y, f]) => dot(x, y, f, ink));
+  // cursor
+  if (state.hover) {
+    const hx = x0 + state.hover[0] / W * (x1 - x0);
+    const q = g.pieces.find(r => hx > r.a && hx < r.b) || g.pieces.find(r => hx >= r.a && hx <= r.b);
+    if (q) {
+      const hy = safe(q.f, hx, p);
+      if (isFinite(hy) && hy > y0 && hy < y1) {
+        c.strokeStyle = line; c.lineWidth = 1; c.beginPath(); c.moveTo(X(hx), 0); c.lineTo(X(hx), H); c.stroke();
+        c.fillStyle = ink; c.beginPath(); c.arc(X(hx), Y(hy), 3.5, 0, 7); c.fill();
+        const t = `x = ${fmt(hx)}   y = ${fmt(hy)}`; c.font = "600 12px JetBrains Mono, monospace";
+        const tw = c.measureText(t).width + 14; let bx = X(hx) + 10; if (bx + tw > W) bx = X(hx) - tw - 10;
+        const by = Math.min(Math.max(Y(hy) - 30, 4), H - 26);
+        c.fillStyle = paper; c.strokeStyle = line; c.fillRect(bx, by, tw, 22); c.strokeRect(bx, by, tw, 22);
+        c.fillStyle = ink; c.textAlign = "left"; c.textBaseline = "middle"; c.fillText(t, bx + 7, by + 11);
+      }
+    }
+  }
+  // leyenda
+  const ley = $("#ley");
+  if (ley) {
+    ley.innerHTML = "";
+    g.pieces.forEach((q, i) => { const s = document.createElement("span"); s.innerHTML = `<i style="background:${cols[i % cols.length]}"></i>`; s.append(`trozo ${i + 1}`); ley.append(s); });
+    if (tx !== null) { const s = document.createElement("span"); s.innerHTML = `<i style="background:${ink}"></i>`; s.append(`tangente en x = ${fmt(tx)}`); ley.append(s); }
+  }
+}
+window.addEventListener("resize", drawAll);
+new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+try { matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll); } catch {}
+
+/* ---------------- ARRANQUE ---------------- */
+function fromHash() {
+  const h = location.hash.slice(1);
+  const m = h.match(/^ej-(\d+)$/);
+  if (m && +m[1] >= 1 && +m[1] <= E.length) { if (state.ej !== +m[1] || !$("#ficha").children.length) openEj(+m[1]); setView("ejercicios", false); }
+  else if (h === "metodo" || h === "resumen") setView(h, false);
+  else setView("ejercicios", false);
+}
+buildList();
+openEj(1);
+fromHash();
+state.ready = true;
+window.addEventListener("hashchange", fromHash);
+if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(() => { typeset(document.body); drawAll(); });
+</script>
+</body></html>
